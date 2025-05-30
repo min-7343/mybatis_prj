@@ -28,7 +28,7 @@ public class HelloMyBatis {
 				//int cnt=ss.selectOne("kr.co.sist.hello.webMemberCnt");
 				List<Dept> list=ss.selectList("kr.co.sist.hello.selectAllDept");
 				
-				for(Dept dept:list ) {
+				for(Dept dept : list ) {
 					System.out.println(dept.getDeptno()+" / "+dept.getDname()+" / "+
 										dept.getLoc());
 				}

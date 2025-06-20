@@ -13,6 +13,10 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class HelloMyBatis {
 	
+	public HelloMyBatis() {
+		org.apache.ibatis.logging.LogFactory.useLog4J2Logging();
+	}
+	
 	public void useMyBatis() {
 		File file=new File("C:/dev/workspace/mybatis_prj/src/main/java/day0530/mybatis-config.xml");
 		if( file.exists()) {
@@ -26,7 +30,12 @@ public class HelloMyBatis {
 				SqlSession ss=ssf.openSession();
 				//4. Handler를 사용한 조작
 				//int cnt=ss.selectOne("kr.co.sist.hello.webMemberCnt");
-				List<Dept> list=ss.selectList("kr.co.sist.hello.selectAllDept");
+				
+				//MyBatis Handler(ss)가 namespace와 id를 결합하여 node를 찾고 parsing
+				//List<Dept> list=ss.selectList("kr.co.sist.hello.selectAllDept");
+				
+				//MyBatis Handler(ss)가 namespace는 생략가능
+				List<Dept> list=ss.selectList("selectAllDept");
 				
 				for(Dept dept : list ) {
 					System.out.println(dept.getDeptno()+" / "+dept.getDname()+" / "+

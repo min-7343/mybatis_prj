@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="day0602">
+<!-- insert -->
+<!-- insert 외부 값 없이 추가 : parameterType송성을 사용하지 않는다.
+	 고정적인 형식으로 값을 추가해야할 때
+	 SqlSession.insert("아이디") -->
+	 
+<insert id="insertCpEmp7">
+INSERT INTO CP_EMP7(EMPNO, ENAME, JOB, SAL,COMM, HIREDATE )
+VALUES  (seq_board.nextval, '이장훈','개발자',3000,0, SYSDATE)
+
+</insert>
+<!-- insert 단일형 추가
+	 java에서 사용하는 모든 데이터형을 직접 사용할 수 있다.
+	 기본형 데이터형이나 Wrapper는 getter method가 없으므로
+	 값을 사용하는 퀴리에서는 아무말 대잔치를 하면 된다.(들어가는건 같아서 맞춰서 써준다.)-->
+<insert id="insertEmpno" parameterType="int">
+INSERT INTO CP_EMP7(EMPNO,ENAME) VALUES (#{ empno },'강태일')
+</insert>
+
+<!-- insert 복합형 추가
+	 #{ getter명 }
+-->
+<insert id="insertDTO" parameterType="day0602.CpEmpDTO">
+INSERT INTO CP_EMP7(EMPNO, ENAME, JOB, SAL,COMM, HIREDATE )
+VALUES  (seq_board.nextval, #{ ename },#{ job }, #{ sal }, #{ comm }, SYSDATE)
+
+</insert>
+
+
+</mapper>
+    

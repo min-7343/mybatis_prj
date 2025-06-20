@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.board">
+
+<!-- 게시물읜 총 수  : dynamic query
+	keyword가 존재하면 whrer 절이 동적생성 -->
+<select id="selectTotalCount" resultType="int" parameterType="rangeDTO">
+select	count(num) cnt	
+from	board
+<where>
+<if test="keyword neq null and keyword neq ''">
+instr( ${fieldName}, #{ keyword } ) != 0
+</if>
+</where>
+</select>
+<!-- 시작번호와 끝 번호 사이에 게시물의 검색 : dynamic query
+	 dynamic query keyword가 존재하면 where 절이 동적생성 
+	 setter랑 column명이 항상 같지는 않다. 
+	 $은 SQLInjection이 발생할 수 있다.-->
+<resultMap type="boardDTO" id="boardResult">
+<result column="num" property="num"/>
+<result column="subject" property="subject"/>
+<result column="id" property="id"/>
+<result column="input_date" property="input_date"/>
+<result column="cnt" property="cnt"/>
+</resultMap>
+	 
+	 <select id="selectBoard" resultMap="boardResult" parameterType="rangeDTO">
+	 	select num, subject, id, input_date, cnt
+		from (select num, subject, id, input_date,  cnt,
+		row_number()over(order by input_date desc) rnum
+		from board
+		
+		<where>
+		<if test="keyword neq null and keyword neq ''">
+		instr(${fieldName}, #{keyword})!=0
+	 	</if>
+	 	</where>
+	 )	where rnum between #{startNum} and  #{endNum}
+	 </select>
+	 
+
+</mapper>

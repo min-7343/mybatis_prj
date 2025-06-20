@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0609">
+<!-- resultMap이나 resultType 둘 중 하나만 사용한다. (같이 쓰면 오류) -->
+<!-- where like 조회
+	동이름을 입력 받아 우편번호, 주소 (시도, 구군, 동, 번지) 를 검색-->
+
+	<resultMap type="zipcodeDomain"	id="zdResult">
+		<result column="ZIPCODE" property="zipcode"/>
+		<result column="SIDO" property="sido"/>
+		<result column="GUGUN" property="gugun"/>
+		<result column="DONG" property="dong"/>
+		<result column="BUNJI" property="bunji"/>
+	</resultMap>
+
+	<select id="like" resultMap="zdResult" parameterType="String">
+	select	zipcode, sido, gugun, dong, nvl(bunji,''), bunji
+	from	zipcode
+	where 	dong like #{ dong }||'%'
+	
+	
+	</select>
+
+<!-- subquery 
+	사원테이블에서 가장 마지막에 입사한 사원부터 10명의 사원 정보를 조회 
+	사원번호, 사원명, 입사일, 연봉, 보너스, 직무를 검색-->
+	
+	<resultMap type="cpEmpDomain" id="ceResult">
+		<result column="empno" property="empno" />
+		<result column="ename" property="ename" />
+		<result column="hiredate" property="hiredate" />
+		<result column="comm" property="comm" />
+		<result column="job" property="job" />
+	</resultMap>
+	<select id="subquery" resultMap="ceResult">
+	select empno, ename,to_char(hiredate,'mm-dd-yyyy q"분기"') hiredateStr,sal, comm, job
+	from (select empno, ename, hiredate, sal, comm, job,
+			row_number() over(order by hiredate desc) rnum
+			from	emp)
+	where rnum between 1 and 10
+	
+	</select>
+	
+	
+<!-- union -->
+<!-- join -->
+<!-- subquery join -->
+
+<!-- dynamic query OGNL -->
+
+<!-- $사용 -->
+
+
+</mapper>
+    

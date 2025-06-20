@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<properties resource="properties/database.properties"/>
+<typeAliases>
+
+<typeAlias type="kr.co.sist.domain.CpEmp" alias="cpEmpDomain"/>
+<typeAlias type="kr.co.sist.domain.Zipcode" alias="zipcodeDomain"/>
+<typeAlias type="kr.co.sist.domain.Car" alias="carDomain"/>
+<typeAlias type="kr.co.sist.domain.CpEmp2" alias="cpEmpDomain2"/>
+<typeAlias type="kr.co.sist.domain.ProcedureCar" alias="pCar"/>
+
+<typeAlias type="day0602.CpEmpDTO" alias="cpEmpDTO"/>
+<typeAlias type="day0612.WhereDTO" alias="wDTO"/>
+<typeAlias type="day0613.TransactionDTO" alias="tDTO"/>
+<typeAlias type="day0616.CpEMP6DTO" alias="cpEmp6DTO"/>
+
+<!-- 게시판에서 사용되는  DTO -->
+<typeAlias type="kr.co.sist.board.RangeDTO" alias="rangeDTO"/>
+<typeAlias type="kr.co.sist.board.BoardDTO" alias="boardDTO"/>
+</typeAliases>
+
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driverClass}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${id}"/>
+        <property name="password" value="${pass}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <!-- 확장자 있으면 경로 : / , 확장자가 정의되지 않으면 : . -->
+  <mappers>
+    <mapper resource="day0530/testMapper.xml"/>
+    <mapper resource="day0602/examMapper.xml"/>
+    <mapper resource="day0604/examMapper2.xml"/>
+    <mapper resource="day0604/selectMapper.xml"/>
+    <mapper resource="day0605/selectMapper2.xml"/>
+    <mapper resource="day0609/selectMapper3.xml"/>
+    <mapper resource="day0610/selectMapper4.xml"/>
+    <mapper resource="day0612/selectMapper5.xml"/>
+    <mapper resource="day0613/selectMapper6.xml"/>
+    <mapper resource="day0616/selectMapper7.xml"/>
+
+	<!-- 사용자 자유게시판 Mapper -->
+    <mapper resource="kr/co/sist/board/boardMapper.xml"/>
+  </mappers>
+</configuration>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0604">
+<!-- 컬럼 하나에 한행 조회 :
+	사원 테이블에서 사원 번호 입력받아 사원명을 검색
+-->
+<select id="scsr" resultType="String" parameterType="Integer">
+SELECT ENAME
+FROM EMP
+WHERE EMPNO=#{ empno }
+</select>
+
+<!-- 컬럼 하나에 여러행 조회 
+		사원테이블에서 모든 부서번호 검색
+		List<Integer> list=SqlSession.selectList("kr.co.sist.day0604.scmr")
+		-->
+<select id="scmr" resultType="int">
+SELECT distinct deptno
+FROM EMP
+order by deptno		
+</select>
+<!-- 컬럼 여러개에 한 행 조회 -->
+<!-- 컬럼 여러개에 여러행 조회 -->
+
+<!-- where 절 > 조회 -->
+<!-- where 절 < 조회 -->
+<!-- where like 조회 -->
+
+<!-- subquery -->
+<!-- union -->
+<!-- join -->
+<!-- subquery join -->
+
+<!-- dynamic query OGNL -->
+
+<!-- $사용 -->
+
+
+</mapper>
+    

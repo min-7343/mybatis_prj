@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0605">
+
+<!-- 컬럼 여러개에 한 행 조회 
+	사원테이블에서 사원번호를 입력받아 사원명, 직무, 연봉, 보서스를 검색
+	
+	MyBatis Framework에서는 기본 생성자를 사용하여 객체화를 하고, 조회는 컬럼명과 
+	일치하는 setter method를 호출하여 조회된 컬럼 값을 (DTO,Domain,VO)넣어준다
+-->
+<select id="mcsr" parameterType="int" resultType="cpEmpDomain" >
+SELECT ENAME, JOB, SAL, COMM, HIREDATE, to_char(hiredate,'yyyy-mm-dd day') hiredatestr
+FROM EMP
+WHERE EMPNO=#{ empno }
+</select>
+
+
+<!-- 컬럼 여러개에 여러행 조회 
+부서번호를 입력받아서 부서의 사원 정보(사원번호, 사원명, 직무, 연봉, 보너스)를 검색
+	List<Domain> list=SqlSession.selectList("아이디", 값); -->
+	<select id="mcmr" parameterType="Integer" resultType="cpEmpDomain" >
+	SELECT EMPNO,ENAME, JOB, SAL, COMM, HIREDATE
+	FROM EMP
+	WHERE deptno=#{ deptno }
+	
+	</select>
+
+
+
+<!-- where 절  조회 
+사원 테이블에서 입력된 연봉보다 적은 연봉을 받는 사원들의 정보(사원번호, 사원명, 직무, 연봉, 보너스,입사일)를 검색
+1. 특수문자 : where sal &lt; #{sal} 이거 안됨.
+2. CDATA Section <![CDATA[쿼리문]]>
+-->
+<select id="lessThan" parameterType="int" resultType="cpEmpDomain" >
+<![CDATA[
+	SELECT EMPNO, ENAME, JOB, SAL, COMM, HIREDATE
+	FROM EMP
+	WHERE sal < #{ sal } 
+	order by sal desc
+	]]>
+</select>
+
+
+
+<!-- where 절 < 조회 : <![CDATA[쿼리문]]> 하지 않아도 된다.
+ > 의 에러 발생하지 않는다. 그냥 쓰는 것 보다는 &gt; 나 <![CDATA[쿼리문]]> 쓰는 것을 권장 -->
+<select id="greaterThan" parameterType="int" resultType="cpEmpDomain" >
+
+	SELECT EMPNO, ENAME, JOB, SAL, COMM, HIREDATE
+	FROM EMP
+	WHERE sal > #{ sal } 
+	order by sal
+
+</select>
+<!-- where like 조회 -->
+
+<!-- subquery -->
+<!-- union -->
+<!-- join -->
+<!-- subquery join -->
+
+<!-- dynamic query OGNL -->
+
+<!-- $사용 -->
+
+
+</mapper>
+    

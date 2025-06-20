@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0616">
+	
+<!-- PL/SQL : procedure 호출 (대소문자 가린다.) -->
+	<select id="procedureInsert" parameterType="cpEmp6DTO" statementType="CALLABLE">
+	{
+		call insert_cp_emp( #{ empno,mode=IN,jdbcType=NUMERIC},
+							#{ ename,mode=IN,jdbcType=VARCHAR},
+							#{ job,mode=IN,jdbcType=VARCHAR},
+							#{ sal,mode=IN,jdbcType=NUMERIC},
+							#{ cnt,mode=OUT,jdbcType=NUMERIC},
+							#{ msg,mode=OUT,jdbcType=VARCHAR} )
+	}
+	
+	</select>
+
+<!-- PL/SQL : procedure 호출 select -->
+<!-- 입력받아서 조회결과를 저장할 Map 선언 -->
+<resultMap type="hashmap" id="carMap"/>
+<select id="procedureSelect" statementType="CALLABLE">
+{
+	call select_car2(#{maker,mode=IN,jdbcType=VARCHAR},
+					#{selectCar,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet, resultMap=carMap},
+					#{errm,mode=OUT,jdbcType=VARCHAR, resultMap=carMap}	)
+}
+</select>
+
+
+</mapper>
+    

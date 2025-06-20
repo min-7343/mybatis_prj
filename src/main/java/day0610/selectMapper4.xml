@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0610">
+	
+<!-- union
+	본사 (emp)와 지산 (cp_emp7)사원을 모두 검색
+	사원번호, 사원명, 직무, 연봉, 보너스, 입사일 -->
+<!-- 중복 쿼리문을 정의 -->
+<sql id="empDup">
+SELECT empno, ename, job, sal, comm, hiredate <!-- 자주 쓰게되는 쿼리를 지정해놓고 갖다쓰는 레고방식? -->
+</sql>
+
+<resultMap type="cpEmpDomain" id="ceResult">
+	<result column="EMPNO" property="empno"/>
+	<result column="ENAME" property="ename"/>
+	<result column="JOB" property="job"/>
+	<result column="SAL" property="sal"/>
+	<result column="COMM" property="comm"/>
+	<result column="HIREDATE" property="hiredate"/>
+</resultMap>
+
+<select id="union" resultMap="ceResult">
+
+<include refid="empDup"/>
+	FROM emp
+	union all
+<include refid="empDup"/>
+FROM cp_emp7
+</select>
+	
+<select id="selectAllModel" resultType="String" >
+select model from car_maker
+</select>
+
+<resultMap type="carDomain" id="cdResult">
+		<result column="MAKER" property="maker"/>
+		<result column="MODEL" property="model"/>
+		<result column="CAR_YEAR" property="car_year"/>
+		<result column="PRICE" property="price"/>
+		<result column="CC" property="cc"/>
+		<result column="CAR_IMG" property="car_img"/>
+		<result column="HIREDATE" property="hiredate"/>
+</resultMap>	
+	
+<!-- join :
+	 모델을 입력받아 보유중인(inner) / 모든(outer)  모델의 제조사, 모델명, 년식, 가격, 배기량, 이미지, 입력일을 조회 
+	car_maker, car_model -->
+	<select id="join" resultMap="cdResult" parameterType="String">
+	SELECT CMAK.MAKER, CMAK.MODEL, CMOD.CAR_YEAR, CMOD.PRICE, CMOD.CC, CMOD.CAR_IMG, CMOD.HIREDATE
+	FROM CAR_MAKER CMAK, CAR_MODEL CMOD
+	WHERE (CMOD.MODEL=CMAK.MODEL) AND CMAK.MODEL=#{ model }
+	</select>
+	
+	
+<!-- subquery join 
+	제조사를 입력 받아 모든 모델의 모델명, 년식, 가격, 배기량, 이미지, 입력일은 조회
+	마지막에 입력된 차량부터 5건만을 조회
+	car_maker, car_model -->
+
+
+
+<!-- dynamic query OGNL -->
+
+<!-- $사용 -->
+
+
+</mapper>
+    

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.day0613">
+
+<!-- dynamic choose 
+	 입력값이 1이면 10번 부서의 모든 사원을 조회
+	 2이면 20번 부서의 모든 사원을 조회
+	 그렇지 않으면 30번 부서의 모든 사원을 조회-->
+	 
+	 <select id="dynamicChoose" resultType="cpEmpDomain" parameterType="int">
+	 select empno,sal,	comm,	deptno,ename, job,hiredate	
+	 from emp
+	 <where>
+	 <choose>
+	 	<when test="num eq 1">
+	 	deptno=10
+	 	</when>
+	 	<when test="num eq 2">
+	 	deptno=20
+	 	</when>
+	 	<otherwise>
+	 	deptno=30
+	 	</otherwise>
+	 </choose>
+	 </where>
+	 </select>
+<!-- dynamic foreach : 선택한 테이블과 사원버혼(여러개=> 배열)를 사용한 검색 in 사용-->
+	 <select id="dynamicForeach" resultType="cpEmpDomain" parameterType="java.util.HashMap">
+		select empno, sal,	comm,	deptno,ename, job,hiredate	
+		from	${tableName}
+		where	empno in
+			<foreach collection="empnoArr" open="(" item="empno" separator="," close=")">
+			#{empno}
+			</foreach>
+	 </select>
+<!-- dynamic set : 사원번호를 사용하여 사원 정보를 변경
+	cp_emp7테이블에서 사원번호에 해당하는 사원의 사원명, 직무, 연봉, 보너스를 변경
+-->
+<!-- 모든 사원 번호 검색 -->
+	<select id="selectAllEmpno" resultType="int">
+	select	empno
+	from	cp_emp7
+	</select>
+	<!-- 모든 사원번호에 해당하는 사원 정보 검색 -->
+	<select id="selectOneEmp" resultType="cpEmpDomain" parameterType="int">
+	select	ename, job,sal, comm, hiredate
+	from	cp_emp7
+	where	empno=#{ empno }
+	
+	</select>
+
+<!-- 사원번호와 일치하는 사원읜 사원명, 직무, 연봉, 보너스를 변경 -->
+	<update id="dynamicSet" parameterType="cpEmpDTO">
+	update 	cp_emp7
+	<set>
+		<if test="ename neq null and ename neq ''">
+		ename=#{ename},
+		</if>
+		<if test="job neq null and job neq ''">
+		job=#{job},
+		</if>
+		<if test="sal neq 0">
+		sal=#{sal},
+		</if>
+		<if test="comm neq 0">
+		comm=#{comm}
+		</if>
+	</set> 
+	where	empno=#{ empno }
+	</update>
+
+
+<!-- transaction처리 -->
+	<insert id="transaction" parameterType="tDTO">
+	insert into test_transaction(name, addr) values(#{name}, #{addr})
+	</insert>
+	
+	<insert id="transaction2" parameterType="tDTO">
+	insert into test_transaction2(name, addr) values(#{name}, #{addr})
+	</insert>
+	
+<!-- PL/SQL -->
+
+
+</mapper>
+    

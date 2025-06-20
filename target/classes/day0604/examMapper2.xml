@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="day0604">
+<!-- 사원 번호, 사원명, 직무, 연봉, 보너스를 입력받아서 사원번호에 해당하는 사워느이 정보를 변경 -->
+<update id="updateCpEmp" parameterType="day0602.CpEmpDTO">
+update  cp_emp7
+set		ename=#{ ename }, job=#{ job }, sal=#{ sal }, comm=#{ comm }
+where	empno=#{ empno }
+</update>
+
+<!-- 사원 번호를 입력 받아 일치하는 사원의 레코드를 삭제 -->
+<delete id="deleteCpEmp" parameterType="Integer">
+delete from cp_emp7
+where empno=#{ empno }
+</delete>
+
+<!-- 한행 조회 
+	사원 번호를 입력 받아서 사원명, 직무, 연봉, 보너스, 입사일 검색 
+	CpEmpDTO ceDTO=ss.selectOne("day0604.selectOne");
+	-->
+<select id="selectOne" parameterType="int" resultType="cpEmpDomain">
+select	ename,job,sal,comm,hiredate
+from	cp_emp7
+where	empno=#{ empno }
+</select>
+
+<!-- 여러행 조회 
+	모든 사원 정보를 조회 
+	SqlSession.selectList("아이디")-->
+<select id="selectList" resultType="cpEmpDomain">
+select	ename,job,sal,comm,hiredate
+from	cp_emp7
+</select>
+
+</mapper>
+    
